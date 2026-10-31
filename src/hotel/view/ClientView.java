@@ -34,4 +34,48 @@ public class ClientView extends JPanel {
         setLayout(new BorderLayout());
         add(mainPanel, BorderLayout.CENTER);
     }
+
+    public JTextField getNameField() {
+        return nameField;
+    }
+
+    public JTextField getLastNameField() {
+        return lastNameField;
+    }
+
+    public JTextField getDniField() {
+        return dniField;
+    }
+
+    public JTextField getPhoneField() {
+        return phoneField;
+    }
+
+    public JTextField getEmailField() {
+        return emailField;
+    }
+
+    public JTextField getSearchField() {
+        return searchField;
+    }
+
+    public JButton getBtnSave() {
+        return btnSave;
+    }
+
+    public JButton getBtnUpdate() {
+        return btnUpdate;
+    }
+
+    public JButton getBtnDelete() {
+        return btnDelete;
+    }
+
+    public JButton getBtnSearch() {
+        return btnSearch;
+    }
+
+    public JTable getClientTable() {
+        return clientTable;
+    }
 }
