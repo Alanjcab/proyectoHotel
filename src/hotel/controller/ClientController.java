@@ -3,6 +3,7 @@ package hotel.controller;
 import hotel.dao.ClientDao;
 import hotel.model.Client;
 import hotel.view.ClientView;
+import hotel.validation.ClientValidator;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -13,6 +14,7 @@ public class ClientController {
 
     private final ClientView view;
     private final ClientDao clientDao;
+    private final ClientValidator clientValidator;
 
     private Client selectedClient;
 
@@ -20,6 +22,7 @@ public class ClientController {
     public ClientController(ClientView view, ClientDao clientDao) {
         this.view = view;
         this.clientDao = clientDao;
+        this.clientValidator = new ClientValidator();
 
         configureTable();
         initController();
@@ -110,6 +113,7 @@ public class ClientController {
 
             Client client = new Client(name, lastName, dni, phone, email);
 
+            clientValidator.validate(client);
             clientDao.save(client);
 
             showMessage("Cliente guardado correctamente");
@@ -191,13 +195,21 @@ public class ClientController {
                 return;
             }
 
-            selectedClient.setName(name);
-            selectedClient.setLastName(lastName);
-            selectedClient.setDni(dni);
-            selectedClient.setPhone(phone);
-            selectedClient.setEmail(email);
+            Client updatedClient = new Client(
+                    selectedClient.getIdClient(),
+                    name,
+                    lastName,
+                    dni,
+                    phone,
+                    email,
+                    selectedClient.getActive()
+            );
 
-            clientDao.update(selectedClient);
+            clientValidator.validate(updatedClient);
+
+            clientDao.update(updatedClient);
+
+            selectedClient = updatedClient;
 
             showMessage("Cliente modificado correctamente");
             clearFields();
