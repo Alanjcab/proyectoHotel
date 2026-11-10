@@ -2,6 +2,8 @@ package hotel.controller;
 
 import hotel.dao.ClientDao;
 import hotel.dao.ClientSqlDao;
+import hotel.dao.RoomDao;
+import hotel.dao.RoomSqlDao;
 import hotel.view.ClientView;
 import hotel.view.MainView;
 import hotel.view.ReservationView;
@@ -15,6 +17,7 @@ public class MainController {
     private final ReservationView reservationView;
 
     private final ClientController clientController;
+    private final RoomController roomController;
 
     public MainController(MainView mainView) {
         this.mainView = mainView;
@@ -24,8 +27,10 @@ public class MainController {
         this.reservationView = new ReservationView();
 
         ClientDao clientDao = new ClientSqlDao();
+        RoomDao roomDao = new RoomSqlDao();
 
         this.clientController = new ClientController(clientView, clientDao);
+        this.roomController = new RoomController(roomView, roomDao);
 
         initController();
 

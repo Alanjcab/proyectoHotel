@@ -27,5 +27,56 @@ public class RoomView extends JPanel {
     public RoomView() {
         setLayout(new BorderLayout());
         add(mainPanel, BorderLayout.CENTER);
+        typeCombo.setModel(new DefaultComboBoxModel<>(
+                new String[]{"Simple", "Doble", "Triple", "Suite"}
+        ));
+        estateCombo.setModel(new DefaultComboBoxModel<>(
+                new String[]{"Disponible", "Ocupada", "Mantenimiento"}
+        ));
     }
+
+    public JTextField getNumberField() {
+        return numberField;
+    }
+
+    public JTextField getPriceField() {
+        return priceField;
+    }
+
+    public JTextField getSearchField() {
+        return searchField;
+    }
+
+    public JButton getBtnSearch() {
+        return btnSearch;
+    }
+
+    public JButton getBtnSave() {
+        return btnSave;
+    }
+
+    public JButton getBtnUpdate() {
+        return btnUpdate;
+    }
+
+    public JButton getBtnDelete() {
+        return btnDelete;
+    }
+
+    public JTable getAllRoomTable() {
+        return allRoomTable;
+    }
+
+    public JComboBox getTypeCombo() {
+        return typeCombo;
+    }
+
+    public JComboBox getEstateCombo() {
+        return estateCombo;
+    }
+
+    public JSpinner getCapacitySpinner() {
+        return CapacitySpinner;
+    }
+
 }

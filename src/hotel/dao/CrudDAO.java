@@ -1,7 +1,7 @@
 package hotel.dao;
 import java.util.List;
 
-public interface crudDao <Entity, ID>{
+public interface CrudDAO<Entity, ID>{
     ID save(Entity entity);
     void update (Entity entity);
     Entity findById (ID id);
