@@ -72,4 +72,27 @@ public class Room {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {return number + " - " + type + " - $" + pricePerNight;}
+
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Room other = (Room) obj;
+        return idRoom > 0 && idRoom == other.idRoom;
+    }
+
+    @Override
+    public int hashCode() {
+        return idRoom > 0 ? Integer.hashCode(idRoom) : System.identityHashCode(this);
+    }
+
 }

@@ -3,9 +3,11 @@ package hotel.service;
 import hotel.model.Reservation;
 import hotel.dao.ReservationDao;
 import hotel.validation.ReservationValidator;
-
+import java.time.LocalDate;
 import java.math.BigDecimal;
 import java.time.temporal.ChronoUnit;
+import hotel.dao.RoomSqlDao;
+import hotel.model.Room;
 
 /**logica de negocio de las reservas*/
 public class ReservationService {
@@ -78,6 +80,17 @@ public class ReservationService {
                     "La reserva no puede ser nula"
             );
         }
+        if (reservation == null) {
+            throw new IllegalArgumentException(
+                    "Los datos de la reserva son obligatorios."
+            );
+        }
+
+        if (!"Pendiente".equalsIgnoreCase(reservation.getStatus()) && !"Confirmada".equalsIgnoreCase(reservation.getStatus())) {
+            throw new IllegalArgumentException(
+                    "Una reserva nueva debe estar pendiente o confirmada"
+            );
+        }
 
         // calcula el precio total
         BigDecimal totalPrice = calculateTotalPrice(reservation);
@@ -85,6 +98,24 @@ public class ReservationService {
 
         // validar los datos de la reserva
         reservationValidator.validate(reservation);
+
+        RoomSqlDao roomDao = new RoomSqlDao();
+
+        Room room = roomDao.findById(
+                reservation.getRoom().getIdRoom()
+        );
+
+        if (room == null) {
+            throw new IllegalArgumentException(
+                    "No se encontro la habitacion."
+            );
+        }
+
+        if (!"Disponible".equalsIgnoreCase(room.getStatus())) {
+            throw new IllegalArgumentException(
+                    "La habitacion no esta disponible para reservar."
+            );
+        }
 
         //comprueba que no existan reservas superpuestas
         boolean isOccupied = reservationDao.hasOverlappingReservation(
@@ -102,6 +133,96 @@ public class ReservationService {
 
         // guardar la reserva en la base de datos
         return reservationDao.save(reservation);
+    }
+
+
+    /**
+     * valida y modifica una reserva existente
+     * @param reservation reserva que se wuiere modificar
+     */
+    public void updateReservation(Reservation reservation) {
+
+        if (reservation == null || reservation.getIdReservation() <= 0) {
+            throw new IllegalArgumentException(
+                    "selleciona una reserva valida"
+            );
+        }
+        Reservation currentReservation = reservationDao.findById(
+                reservation.getIdReservation()
+        );
+
+        if (currentReservation == null) {
+            throw new IllegalArgumentException("No se encontro la reserva");
+        }
+
+        if ("Cancelada".equalsIgnoreCase(currentReservation.getStatus())) {
+            throw new IllegalArgumentException("No se puede modificar una reserva cancelada");
+        }
+
+        if ("Finalizada".equalsIgnoreCase(currentReservation.getStatus())) {
+            throw new IllegalArgumentException("No se puede modificar una reserva finalizada");
+        }
+
+        //calcular nuevamente el precio total
+        BigDecimal totalPrice = calculateTotalPrice(reservation);
+        reservation.setTotalPrice(totalPrice);
+
+        //validar los datos
+        reservationValidator.validate(reservation);
+
+        //comprobar el estado de la habitacion
+        if (!"Disponible".equalsIgnoreCase(
+                reservation.getRoom().getStatus())) {
+
+            throw new IllegalArgumentException("La habitacion no esta disponible para reservar");
+        }
+
+        // comprobar que no existan reservas superpuestas
+        boolean isOccupied = reservationDao.hasOverlappingReservation(
+                reservation.getRoom().getIdRoom(),
+                reservation.getCheckIn(),
+                reservation.getCheckOut(),
+                reservation.getIdReservation()
+        );
+
+        if (isOccupied) {
+            throw new IllegalArgumentException("La habitacion ya tiene una reserva en esas fechas");
+        }
+
+        if ("Finalizada".equalsIgnoreCase(reservation.getStatus())
+                && reservation.getCheckOut().isAfter(LocalDate.now())) {
+
+            throw new IllegalArgumentException(
+                    "No se puede finalizar una reserva antes de su fecha de salida."
+            );
+        }
+        reservationDao.update(reservation);
+    }
+
+
+    /**
+     * cancela una reserva existente sin eliminarla de la db
+     * @param reservationId identificador de la reserva
+     */
+    public void cancelReservation(int reservationId) {
+
+        Reservation reservation = reservationDao.findById(reservationId);
+
+        if (reservation == null) {
+            throw new IllegalArgumentException("No se encontro la reserva");
+        }
+
+        if ("Cancelada".equalsIgnoreCase(reservation.getStatus())) {
+            throw new IllegalArgumentException("La reserva se encuentra cancelada");
+        }
+
+        if ("Finalizada".equalsIgnoreCase(reservation.getStatus())) {
+            throw new IllegalArgumentException("No se puede cancelar una reserva finalizada");
+        }
+
+        reservation.setStatus("Cancelada");
+
+        reservationDao.update(reservation);
     }
 
 }

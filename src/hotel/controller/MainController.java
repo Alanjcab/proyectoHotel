@@ -18,6 +18,7 @@ public class MainController {
 
     private final ClientController clientController;
     private final RoomController roomController;
+    private final ReservationController reservationController;
 
     public MainController(MainView mainView) {
         this.mainView = mainView;
@@ -31,6 +32,7 @@ public class MainController {
 
         this.clientController = new ClientController(clientView, clientDao);
         this.roomController = new RoomController(roomView, roomDao);
+        this.reservationController = new ReservationController(reservationView, clientDao,roomDao);
 
         initController();
 
