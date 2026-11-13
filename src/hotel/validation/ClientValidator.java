@@ -2,12 +2,21 @@ package hotel.validation;
 
 import hotel.model.Client;
 
-/* valido los datos del cliente ants de guardar o modificarlo*/
-
+/**
+ * valida los datos de un cliente antes de guardarlo o modificarlo en el sistema
+ */
 public class ClientValidator {
-
+    /**
+     * comprueba que los datos del cliente sean validos
+     * @param client cliente que se desea validar
+     * @throws IllegalArgumentException si algun dato es invalido
+     */
     public void validate(Client client) {
-
+        if (client == null) {
+            throw new IllegalArgumentException(
+                    "El cliente no puede ser nulo"
+            );
+        }
         if (client.getName() == null || client.getName().isBlank()) {
             throw new IllegalArgumentException("El nombre es obligatorio");
         }
@@ -25,7 +34,7 @@ public class ClientValidator {
         }
 
         if (client.getDni() == null || !client.getDni().matches("[0-9]{7,8}")) {
-            throw new IllegalArgumentException("El dni debe tener maximo 8 numeros");
+             throw new IllegalArgumentException("El dni debe tener entre 7 y 8 numeros");
         }
 
         if (client.getPhone() != null && !client.getPhone().isBlank()) {

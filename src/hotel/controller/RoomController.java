@@ -1,4 +1,3 @@
-
 package hotel.controller;
 
 import hotel.dao.RoomDao;
@@ -31,6 +30,11 @@ public class RoomController {
         view.getBtnUpdate().addActionListener(e -> updateRoom());
         view.getBtnDelete().addActionListener(e -> deleteRoom());
         view.getBtnSearch().addActionListener(e -> searchRoom());
+        view.getAllRoomTable().getSelectionModel().addListSelectionListener(e -> {
+                    if (!e.getValueIsAdjusting()) {
+                        selectRoom();
+                    }
+                });
     }
 
 
@@ -230,14 +234,81 @@ public class RoomController {
     }
 
 
+
+    /**
+     * limpia los campos del formulario y la seleccion de la tabla
+     */
     private void clearFields() {
+
         view.getNumberField().setText("");
         view.getPriceField().setText("");
         view.getSearchField().setText("");
+
         view.getTypeCombo().setSelectedIndex(0);
         view.getEstateCombo().setSelectedIndex(0);
         view.getCapacitySpinner().setValue(0);
+
+        view.getAllRoomTable().clearSelection();
+
         selectedRoom = null;
     }
+
+
+
+    /**
+     *carga los datos de la habitacion seleccionada en la tabla
+     */
+    private void selectRoom() {
+
+        int selectedRow = view.getAllRoomTable().getSelectedRow();
+
+        if (selectedRow == -1) {
+            return;
+        }
+
+        try {
+            int modelRow = view.getAllRoomTable()
+                    .convertRowIndexToModel(selectedRow);
+
+            int roomId = (int) view.getAllRoomTable()
+                    .getModel().getValueAt(modelRow, 0);
+
+            selectedRoom = roomDao.findById(roomId);
+
+            if (selectedRoom == null) {
+                JOptionPane.showMessageDialog(
+                        view, "No se encontro la habitacion seleccionada."
+                );
+                return;
+            }
+
+            view.getNumberField().setText(
+                    String.valueOf(selectedRoom.getNumber())
+            );
+
+            view.getTypeCombo().setSelectedItem(
+                    selectedRoom.getType()
+            );
+
+            view.getCapacitySpinner().setValue(
+                    selectedRoom.getCapacity()
+            );
+
+            view.getPriceField().setText(
+                    selectedRoom.getPricePerNight().toPlainString()
+            );
+
+            view.getEstateCombo().setSelectedItem(
+                    selectedRoom.getStatus()
+            );
+
+        } catch (DaoException ex) {
+            JOptionPane.showMessageDialog(
+                    view, "Error al seleccionar la habitacion" + ex.getMessage(), "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
 
 }

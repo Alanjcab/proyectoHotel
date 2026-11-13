@@ -13,6 +13,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * mmplementacion de ClientDao utilizando mysql
+ * administra la persistencia de cliente
+ * rermite registrar, consultar, modificar, dar de baja
+ * logicamente y reactivar clientes
+ */
+
 public class ClientSqlDao implements ClientDao {
 
     @Override

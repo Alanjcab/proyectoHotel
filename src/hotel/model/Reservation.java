@@ -1,9 +1,13 @@
-
 package hotel.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * representa una reserva del sistema de hoteleria
+ * relaciona el cliente con una habitacion y almacena
+ * las fechas de estadia, el estado y el valor total
+ */
 public class Reservation {
 
     private int idReservation;
@@ -86,4 +90,28 @@ public class Reservation {
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
+
+
+    @Override
+    public String toString() {
+        return "Reserva " + idReservation + " - Cliente: " + client + " - Habitacion: " + room + " - Estado: " + status;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Reservation other = (Reservation) obj;
+        return idReservation > 0 && idReservation == other.idReservation;
+    }
+
+    @Override
+    public int hashCode() {
+        return idReservation > 0 ? Integer.hashCode(idReservation) : System.identityHashCode(this);
+    }
+
 }

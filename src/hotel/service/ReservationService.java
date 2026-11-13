@@ -80,11 +80,6 @@ public class ReservationService {
                     "La reserva no puede ser nula"
             );
         }
-        if (reservation == null) {
-            throw new IllegalArgumentException(
-                    "Los datos de la reserva son obligatorios."
-            );
-        }
 
         if (!"Pendiente".equalsIgnoreCase(reservation.getStatus()) && !"Confirmada".equalsIgnoreCase(reservation.getStatus())) {
             throw new IllegalArgumentException(
@@ -170,11 +165,23 @@ public class ReservationService {
         //validar los datos
         reservationValidator.validate(reservation);
 
-        //comprobar el estado de la habitacion
-        if (!"Disponible".equalsIgnoreCase(
-                reservation.getRoom().getStatus())) {
+        //comprobar el estado actual de la habitacion
+        RoomSqlDao roomDao = new RoomSqlDao();
 
-            throw new IllegalArgumentException("La habitacion no esta disponible para reservar");
+        Room room = roomDao.findById(
+                reservation.getRoom().getIdRoom()
+        );
+
+        if (room == null) {
+            throw new IllegalArgumentException(
+                    "No se encontro la habitacion"
+            );
+        }
+
+        if (!"Disponible".equalsIgnoreCase(room.getStatus())) {
+            throw new IllegalArgumentException(
+                    "La habitacion no esta disponible para reservar"
+            );
         }
 
         // comprobar que no existan reservas superpuestas

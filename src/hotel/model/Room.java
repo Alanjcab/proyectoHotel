@@ -2,6 +2,11 @@ package hotel.model;
 
 import java.math.BigDecimal;
 
+/**
+ * representa una habitacion del sistema de hoteleria
+ * contiene sus datos, capacidad, precio por noche y estado
+ */
+
 public class Room {
 
     private int idRoom;
@@ -12,6 +17,14 @@ public class Room {
     private String status;
 
     /*constructor para registrar una habitacion*/
+    /**
+     * crea una habitacion nueva
+     * @param number numero de la habitacion
+     * @param type tipo de habitacion
+     * @param capacity capacidad de personas
+     * @param pricePerNight precio por noche
+     * @param status estado de la habitacion
+     */
     public Room(int number, String type, int capacity, BigDecimal pricePerNight, String status) {
         this.number = number;
         this.type = type;

@@ -8,6 +8,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * implementacion de RoomDao usando mysql
+ * administra las operaciones de persistencia de habitaciones
+ */
 public class RoomSqlDao implements RoomDao {
     @Override
     public Integer save(Room room) {

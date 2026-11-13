@@ -1,4 +1,3 @@
-
 package hotel.validation;
 
 import hotel.model.Reservation;
@@ -22,22 +21,19 @@ public class ReservationValidator {
             );
         }
 
-        if (reservation.getClient() == null ||
-                reservation.getClient().getIdClient() <= 0) {
+        if (reservation.getClient() == null || reservation.getClient().getIdClient() <= 0) {
             throw new IllegalArgumentException(
                     "Debe seleccionar un cliente valido"
             );
         }
 
-        if (reservation.getRoom() == null ||
-                reservation.getRoom().getIdRoom() <= 0) {
+        if (reservation.getRoom() == null || reservation.getRoom().getIdRoom() <= 0) {
             throw new IllegalArgumentException(
                     "Debe seleccionar una habitacion valida"
             );
         }
 
-        if (reservation.getCheckIn() == null ||
-                reservation.getCheckOut() == null) {
+        if (reservation.getCheckIn() == null || reservation.getCheckOut() == null) {
             throw new IllegalArgumentException(
                     "Las fechas de ingreso y salida son obligatorias"
             );
@@ -49,8 +45,7 @@ public class ReservationValidator {
             );
         }
 
-        if (reservation.getStatus() == null ||
-                reservation.getStatus().isBlank()) {
+        if (reservation.getStatus() == null || reservation.getStatus().isBlank()) {
             throw new IllegalArgumentException(
                     "El estado de la reserva es obligatorio"
             );
@@ -59,6 +54,12 @@ public class ReservationValidator {
         if (reservation.getStatus().length() > 30) {
             throw new IllegalArgumentException(
                     "El estado no puede superar los 30 caracteres"
+            );
+        }
+        if (!reservation.getStatus().equals("Pendiente") && !reservation.getStatus().equals("Confirmada") && !reservation.getStatus().equals("Cancelada") &&
+                !reservation.getStatus().equals("Finalizada")) {
+            throw new IllegalArgumentException(
+                    "El estado de la reserva no es valido"
             );
         }
 

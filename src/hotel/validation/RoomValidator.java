@@ -4,9 +4,15 @@ import hotel.model.Room;
 
 import java.math.BigDecimal;
 
-/*valido los datos de las habitaciones antes de guardarla o modificarla*/
+/**
+ * valida los datos de una habitacion antes de guardarla o modificarla en el sistema
+ */
 public class RoomValidator {
-
+    /**
+     * comprueba que los datos de una habitacion sean validos
+     * @param room habitacion que se desea validar
+     * @throws IllegalArgumentException si algun dato es invalido
+     */
     public void validate(Room room) {
 
         if (room == null) {
@@ -46,5 +52,13 @@ public class RoomValidator {
         if (room.getStatus().length() > 30) {
             throw new IllegalArgumentException("El estado no puede superar los 30 caracteres");
         }
+
+
+        if (!room.getStatus().equals("Disponible") && !room.getStatus().equals("Mantenimiento")) {
+            throw new IllegalArgumentException(
+                    "El estado de la habitacion no es valido"
+            );
+        }
+
     }
 }

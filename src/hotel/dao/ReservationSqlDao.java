@@ -11,6 +11,11 @@ import hotel.model.Client;
 import hotel.model.Room;
 import java.time.LocalDate;
 
+
+/**
+ * implementacion de ReservationDao usando mysql
+ * gstiona la persistencia de reservas y sus relaciones con clientes y habitaciones
+ */
 public class ReservationSqlDao implements ReservationDao {
 
     @Override

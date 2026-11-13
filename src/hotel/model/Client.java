@@ -1,5 +1,9 @@
 package hotel.model;
 
+/**
+ * rpresenta un cliente del sistema de hoteleroia
+ *almacena sus datos personales y su estado de actividad
+ */
 public class Client {
     private int idClient;
     private String name;
@@ -82,4 +86,28 @@ public class Client {
     public void setActive(boolean active) {
         this.active = active;
     }
+
+
+    @Override
+    public String toString() {
+        return name + " " + lastName + " - DNI: " + dni;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Client other = (Client) obj;
+        return idClient > 0 && idClient == other.idClient;
+    }
+
+    @Override
+    public int hashCode() {
+        return idClient > 0 ? Integer.hashCode(idClient) : System.identityHashCode(this);
+    }
+
 }

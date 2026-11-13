@@ -10,6 +10,9 @@ import javax.swing.table.DefaultTableModel;
 import java.util.List;
 
 
+/**
+ * controlador encargado de gestionar las operaciones de clientes y la comunicacion entre la vista, el validador y la capa de persistencia.
+ */
 public class ClientController {
 
     private final ClientView view;
@@ -18,7 +21,11 @@ public class ClientController {
 
     private Client selectedClient;
 
-
+    /**
+     * iicializa el controlador de clientes
+     * @param view vista de clientes
+     * @param clientDao interfaz para el acceso a datos de clientes
+     */
     public ClientController(ClientView view, ClientDao clientDao) {
         this.view = view;
         this.clientDao = clientDao;
@@ -89,6 +96,14 @@ public class ClientController {
 
     private void saveClient() {
         try {
+
+            if (selectedClient != null) {
+                showMessage(
+                        "hay un cliente seleccionado. Usa modificar para actualizarlo"
+                );
+                return;
+            }
+
             String name = view.getNameField().getText().trim();
             String lastName = view.getLastNameField().getText().trim();
             String dni = view.getDniField().getText().trim();
